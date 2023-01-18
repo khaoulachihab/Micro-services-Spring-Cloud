@@ -4,7 +4,7 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "http://localhost:4200"
+            allowedOrigins: "http://localhost:4200/"
             allowedHeaders: "*"
             allowedMethods:
               - GET
@@ -24,6 +24,46 @@ spring:
           uri: http://localhost:8083/
           predicates:
             - Path= /bills/**
+
+  security:
+    oauth2:
+      client:
+        provider:
+          my-keycloak-provider:
+            issuer-uri: http://localhost:8080/realms/ecom-realm
+            # Individual properties can also be provided this way
+        #            token-uri: http://localhost:8080/realms/ecom-realm/protocol/openid-connect/token
+        #            authorization-uri: http://localhost:8080/realms/ecom-realm/protocol/openid-connect/auth
+        #            userinfo-uri: http://localhost:8080/realms/ecom-realm/protocol/openid-connect/userinfo
+        #            user-name-attribute: preferred_username
+        registration:
+          keycloak-spring-gateway-client:
+            provider: my-keycloak-provider
+            scope: openid
+            client-id: ecom-client
+            client-secret: bgA9LHq7OELEAwexYUCvPGC9JqF38gRC
+            authorization-grant-type: authorization_code
+
+            #redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+  application:
+    name: "gateway-service"
+
+# Enable these to debug the Authorization flow
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: DEBUG
+server:
+  port: 8889
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 
 
 
